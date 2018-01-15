@@ -16,6 +16,7 @@ public class AccountServiceClient extends DataHubClient {
     public String Login(LoginRequest request)
     {
         String ret = null;
+
         try {
             ret = postSync("/Account/Login", "{ \"login\": \"binbank-test-rd-web\", \"password\": \"Kmzx78Hg\" }"/*request.toString()*/);
         } catch (KeyStoreException e) {
