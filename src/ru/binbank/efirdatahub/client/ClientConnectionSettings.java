@@ -8,4 +8,5 @@ public class ClientConnectionSettings {
     public String domainUser;
     public String domainPwd;
     public String domainName;
+
 }
