@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 public class AccountServiceClient extends DataHubClient {
     public AccountServiceClient(ClientConnectionSettings connectionSettings) {
         super(connectionSettings);
+
+
     }
 
     public String Login(LoginRequest request)
