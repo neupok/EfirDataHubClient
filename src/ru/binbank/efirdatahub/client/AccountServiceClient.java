@@ -1,6 +1,8 @@
 package ru.binbank.efirdatahub.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.binbank.efirdatahub.entities.accountservice.contracts.LoginRequest;
+import ru.binbank.efirdatahub.entities.accountservice.contracts.LoginResponse;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,16 +13,18 @@ import java.security.NoSuchAlgorithmException;
 public class AccountServiceClient extends DataHubClient {
     public AccountServiceClient(ClientConnectionSettings connectionSettings) {
         super(connectionSettings);
+        {}
 
 
     }
 
-    public String Login(LoginRequest request)
+    public LoginResponse Login(LoginRequest loginRequest)
     {
-        String ret = null;
-
+        LoginResponse loginResponse = null;
         try {
-            ret = postSync("/Account/Login", "{ \"login\": \"binbank-test-rd-web\", \"password\": \"Kmzx78Hg\" }"/*request.toString()*/);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String retString = postSync("/Account/Login", objectMapper.writeValueAsString(loginRequest));
+            loginResponse = objectMapper.readValue(retString, LoginResponse.class);
         } catch (KeyStoreException e) {
             e.printStackTrace();
         }  catch (IOException e) {
@@ -32,7 +36,6 @@ public class AccountServiceClient extends DataHubClient {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return ret;
+        return loginResponse;
     }
-
 }
