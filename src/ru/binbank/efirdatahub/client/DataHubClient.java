@@ -40,32 +40,21 @@ public abstract class DataHubClient {
         this.connectionSettings = connectionSettings;
     }
 
-    protected String postSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
-        // Формирование URI
-        URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
-
-        // Формирование credentials
-        NTCredentials creds = new NTCredentials(connectionSettings.domainUser, connectionSettings.domainPwd, null, connectionSettings.domainName);
-
-        CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(AuthScope.ANY,creds);
-
-        // Формирование конфигурации
-        RequestConfig config = RequestConfig.custom().setProxy(connectionSettings.proxy).setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM)).build();
-
-        // Формирование тела сообщения
-        HttpEntity entity = new StringEntity(query, ContentType.APPLICATION_JSON);
-
-        // Сформировать запрос
-        HttpPost request = new HttpPost(u);
-        request.setEntity(entity);
-        request.setConfig(config);
-        request.addHeader("Accept", "application/json" );
-
+    protected CloseableHttpClient createHttpClient()
+    {
         // Создание http-клиента
-        SSLContext sslContext = SSLContextBuilder.create().
-                                loadTrustMaterial(null, (TrustStrategy) (arg0, arg1) -> true
-                                ).build();
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContextBuilder.create().
+                    loadTrustMaterial(null, (TrustStrategy) (arg0, arg1) -> true
+                    ).build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
 
         /*
         create an SSL Socket Factory to use the SSLContext with the trust self signed certificate strategy
@@ -76,15 +65,49 @@ public abstract class DataHubClient {
                 sslContext,
                 NoopHostnameVerifier.INSTANCE);
 
-        // Создание контекста
-        HttpClientContext clientContext = new HttpClientContext();
-        clientContext.setCredentialsProvider(credsProvider);
-
         //CloseableHttpClient httpclient = WinHttpClients.custom().setSSLSocketFactory(connectionFactory).build();
         CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(connectionFactory)/*.setDefaultCredentialsProvider(credsProvider)*/.build();
 
+        return httpclient;
+
+    }
+
+    protected HttpClientContext createClientContext() {
+        // Формирование credentials
+        NTCredentials creds = new NTCredentials(connectionSettings.domainUser, connectionSettings.domainPwd, null, connectionSettings.domainName);
+
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(AuthScope.ANY,creds);
+
+        HttpClientContext clientContext = new HttpClientContext();
+        clientContext.setCredentialsProvider(credsProvider);
+
+        return clientContext;
+    }
+
+    protected RequestConfig createRequestConfig() {
+        // Формирование конфигурации
+        return RequestConfig.custom().setProxy(connectionSettings.proxy).setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM)).build();
+    }
+
+
+    protected String postSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+        // Формирование URI
+        URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
+
+        // Формирование тела сообщения
+        HttpEntity entity = new StringEntity(query, ContentType.APPLICATION_JSON);
+
+        // Сформировать запрос
+        HttpPost request = new HttpPost(u);
+        request.setEntity(entity);
+        request.setConfig(createRequestConfig());
+        request.addHeader("Accept", "application/json" );
+
+        // Создание http-клиента
+        CloseableHttpClient httpClient = createHttpClient();
         // Вызов метода
-        CloseableHttpResponse response = httpclient.execute(request, clientContext);
+        CloseableHttpResponse response = httpClient.execute(request, createClientContext());
 
         try {
             System.out.println("----------------------------------------");
@@ -94,6 +117,28 @@ public abstract class DataHubClient {
         } finally {
             response.close();
         }
+    }
+
+    protected String getSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+        //
+        //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
+
+        // Формирование URI
+        URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
+        // добавление токена
+        uriBuilder.addParameter("token", token);
+
+        // Сформировать запрос
+        HttpGet request = new HttpGet(uriBuilder.build());
+        request.setConfig(createRequestConfig());
+        request.addHeader("Accept", "application/json" );
+
+        // Создание http-клиента
+        CloseableHttpClient httpClient = createHttpClient();
+        // Вызов метода
+        CloseableHttpResponse response = httpClient.execute(request, createClientContext());
+
+        return EntityUtils.toString(response.getEntity());
     }
 
 
