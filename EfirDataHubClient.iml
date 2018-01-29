@@ -40,14 +40,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/Test_Efir/src" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
