@@ -1,8 +1,6 @@
 package ru.binbank.efirdatahub.entities.accountservice.contracts;
 
-import ru.binbank.efirdatahub.entities.ISupportDump;
-
-public class LogoffResponse implements ISupportDump {
+public class LogoffResponse {
     private String token;
     //private String error;
     //private int StatusCode;
@@ -16,9 +14,5 @@ public class LogoffResponse implements ISupportDump {
 
     //public int getSubStatusCode() { return SubStatusCode; }
     //public void setSubStatusCode(String SubStatusCode) { this.SubStatusCode = SubStatusCode; }
-
-    @Override
-    public void Dump(StringBuilder outSb) {
-    }
 
 }

@@ -1,5 +1,6 @@
 package ru.binbank.efirdatahub.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.NTCredentials;
@@ -30,6 +31,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Map;
 
 public abstract class DataHubClient {
     private ClientConnectionSettings connectionSettings;
@@ -119,7 +121,7 @@ public abstract class DataHubClient {
         }
     }
 
-    protected String getSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+    protected String getSync(String specificUri, Map<String, String> params) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
         //
         //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
 
@@ -127,6 +129,11 @@ public abstract class DataHubClient {
         URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
         // добавление токена
         uriBuilder.addParameter("token", token);
+
+        if (params != null)
+            for (String key : params.keySet()) {
+                uriBuilder.addParameter(key, params.get(key));
+            }
 
         // Сформировать запрос
         HttpGet request = new HttpGet(uriBuilder.build());
@@ -141,7 +148,6 @@ public abstract class DataHubClient {
         return EntityUtils.toString(response.getEntity());
     }
 
-
     public String getToken() {
         return token;
     }
@@ -149,4 +155,23 @@ public abstract class DataHubClient {
     public void setToken(String token) {
         this.token = token;
     }
+
+    // kvd: neupok
+    protected Object runMethod(String methodName, String methodType, Object request, Class responseClass) throws IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String responseString = null;
+        if (methodType.equals("GET")) {
+            responseString = getSync(methodName, ((ru.binbank.efirdatahub.entities.IRequest)request).getParams());
+        }
+        else if (methodType.equals("POST")) {
+            String requestString = objectMapper.writeValueAsString(request);
+            responseString = postSync(methodName, requestString);
+        }
+
+        Object response = objectMapper.readValue(responseString, responseClass);
+
+        return response;
+    }
+
 }

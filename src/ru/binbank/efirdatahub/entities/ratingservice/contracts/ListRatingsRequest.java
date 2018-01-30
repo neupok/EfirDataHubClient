@@ -1,21 +1,27 @@
 package ru.binbank.efirdatahub.entities.ratingservice.contracts;
 
-import ru.binbank.efirdatahub.entities.ISupportDump;
 
+import java.util.HashMap;
 
-public class ListRatingsRequest implements ISupportDump {
+public class ListRatingsRequest implements ru.binbank.efirdatahub.entities.IRequest {
+    public String getFilter() {
+        return filter;
+    }
 
-    //private String filter;
-    private String token;
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
 
-    //public void setFilter(String filter) { this.filter = filter; }
-    //public String getFilter() { return filter; }
-
-    public void setToken(String token) { this.token = token; }
-    public String getToken() { return token; }
+    private String filter;
 
     @Override
-    public void Dump(StringBuilder outSb) {
+    public HashMap<String, String> getParams() {
+        HashMap<String, String> result = new HashMap<String, String>();
+        if (filter != null)
+            if (!filter.isEmpty())
+                result.put("filter", filter);
+        return result;
     }
 }
+
 

@@ -1,6 +1,6 @@
 package ru.binbank.efirdatahub.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.binbank.efirdatahub.entities.TableResponse;
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.ListRatingsRequest;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class RatingServiceClient extends DataHubClient {
         super(connectionSettings);
     }
 
-
+/*
     // Это вариант для тестирования - возвращаем не объект, а строку, чтобы на неё посмотреть:
     public String ListRatingsString(ListRatingsRequest listRatingsRequest) {
         //ListRatingsResponse listRatingsResponse = null;
@@ -49,9 +49,14 @@ public class RatingServiceClient extends DataHubClient {
 
         return sListRatingsResponse;
     }
-
+*/
     // Это рабочий вариант - возвращаем объект:
-    public TableResponse ListRatings(ListRatingsRequest listRatingsRequest) {
+    public TableResponse ListRatings(ListRatingsRequest listRatingsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        TableResponse response = (TableResponse) runMethod("Rating/ListRatings", "GET", listRatingsRequest, TableResponse.class); // kvd: neupok
+
+        return response;
+
+        /*
         TableResponse listRatingsResponse = null;
 
         try {
@@ -80,6 +85,11 @@ public class RatingServiceClient extends DataHubClient {
         }
 
         return listRatingsResponse;
+        */
+    }
+
+    public TableResponse ListCompanies(entities.ratingservice.contracts.ListCompaniesRequest listCompaniesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Rating/ListCompanies", "GET", listCompaniesRequest, TableResponse.class);
     }
 
 }

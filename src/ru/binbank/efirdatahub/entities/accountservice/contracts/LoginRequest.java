@@ -1,8 +1,6 @@
 package ru.binbank.efirdatahub.entities.accountservice.contracts;
 
-import ru.binbank.efirdatahub.entities.ISupportDump;
-
-public class LoginRequest implements ISupportDump {
+public class LoginRequest {
     private String login;
     private String password;
 
@@ -22,7 +20,4 @@ public class LoginRequest implements ISupportDump {
         this.password = password;
     }
 
-    @Override
-    public void Dump(StringBuilder outSb) {
-    }
 }
