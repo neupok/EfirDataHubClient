@@ -1,4 +1,4 @@
-package entities.ratingservice.contracts;
+package ru.binbank.efirdatahub.entities.ratingservice.contracts;
 
 import java.util.HashMap;
 
