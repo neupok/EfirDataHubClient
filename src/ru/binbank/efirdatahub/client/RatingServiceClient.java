@@ -3,6 +3,7 @@ package ru.binbank.efirdatahub.client;
 import ru.binbank.efirdatahub.entities.TableResponse;
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.CompanyRatingsRequest;
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.ListRatingsRequest;
+import ru.binbank.efirdatahub.entities.ratingservice.contracts.ListCompaniesRequest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -24,7 +25,7 @@ public class RatingServiceClient extends DataHubClient {
         return (TableResponse) runMethod("Rating/CompanyRatings","GET", companyRatingsRequest, TableResponse.class);
     }
 
-    public TableResponse ListCompanies(entities.ratingservice.contracts.ListCompaniesRequest listCompaniesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse ListCompanies(ListCompaniesRequest listCompaniesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Rating/ListCompanies", "GET", listCompaniesRequest, TableResponse.class);
     }
 
