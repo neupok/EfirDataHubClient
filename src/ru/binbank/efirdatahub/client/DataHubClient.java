@@ -22,6 +22,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import ru.binbank.efirdatahub.entities.IRequest;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -162,7 +163,7 @@ public abstract class DataHubClient {
 
         String responseString = null;
         if (methodType.equals("GET")) {
-            responseString = getSync(methodName, ((ru.binbank.efirdatahub.entities.IRequest)request).getParams());
+            responseString = getSync(methodName, ((IRequest)request).getParams());
         }
         else if (methodType.equals("POST")) {
             String requestString = objectMapper.writeValueAsString(request);

@@ -5,6 +5,9 @@ import ru.binbank.efirdatahub.entities.ratingservice.contracts.CompanyRatingsReq
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.ListRatingsRequest;
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.ListCompaniesRequest;
 import ru.binbank.efirdatahub.entities.ratingservice.contracts.RatingsHistoryRequest;
+import ru.binbank.efirdatahub.entities.ratingservice.contracts.SecurityRatingsRequest;
+import ru.binbank.efirdatahub.entities.ratingservice.contracts.SecurityRatingsHistRequest;
+import ru.binbank.efirdatahub.entities.ratingservice.contracts.CompanyRatingsHistRequest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -32,6 +35,16 @@ public class RatingServiceClient extends DataHubClient {
 
     public TableResponse RatingsHistory(RatingsHistoryRequest ratingsHistoryRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Rating/RatingsHistory", "GET", ratingsHistoryRequest, TableResponse.class);
+    }
+
+    public TableResponse SecurityRatings(SecurityRatingsRequest securityRatingsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Rating/SecurityRatings", "GET", securityRatingsRequest, TableResponse.class);
+    }
+    public TableResponse SecurityRatingsHist(SecurityRatingsHistRequest securityRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Rating/SecurityRatingsHist", "GET", securityRatingsHistRequest, TableResponse.class);
+    }
+    public TableResponse CompanyRatingsHist(CompanyRatingsHistRequest companyRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Rating/CompanyRatingsHist", "GET", companyRatingsHistRequest, TableResponse.class);
     }
 }
 
