@@ -26,7 +26,6 @@ import ru.binbank.efirdatahub.entities.IRequest;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -93,16 +92,21 @@ public abstract class DataHubClient {
         return RequestConfig.custom().setProxy(connectionSettings.proxy).setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM)).build();
     }
 
+    protected String postSync(String specificUri, Map<String, String> params,String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+        //
+        //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
 
-    protected String postSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
         // Формирование URI
-        URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
-
+        URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
+        // добавление токена
+        if(token != null) {
+            uriBuilder.addParameter("token", token);
+        }
         // Формирование тела сообщения
         HttpEntity entity = new StringEntity(query, ContentType.APPLICATION_JSON);
 
         // Сформировать запрос
-        HttpPost request = new HttpPost(u);
+        HttpPost request = new HttpPost(uriBuilder.build());
         request.setEntity(entity);
         request.setConfig(createRequestConfig());
         request.addHeader("Accept", "application/json" );
@@ -112,16 +116,8 @@ public abstract class DataHubClient {
         // Вызов метода
         CloseableHttpResponse response = httpClient.execute(request, createClientContext());
 
-        try {
-            System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
-            System.out.println();
-            return EntityUtils.toString(response.getEntity());
-        } finally {
-            response.close();
-        }
+        return EntityUtils.toString(response.getEntity());
     }
-
     protected String getSync(String specificUri, Map<String, String> params) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
         //
         //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
@@ -166,8 +162,8 @@ public abstract class DataHubClient {
             responseString = getSync(methodName, ((IRequest)request).getParams());
         }
         else if (methodType.equals("POST")) {
-            String requestString = objectMapper.writeValueAsString(request);
-            responseString = postSync(methodName, requestString);
+           String requestString = objectMapper.writeValueAsString(request);
+           responseString = postSync(methodName, ((IRequest)request).getParams(), requestString);
         }
 
         Object response = objectMapper.readValue(responseString, responseClass);
