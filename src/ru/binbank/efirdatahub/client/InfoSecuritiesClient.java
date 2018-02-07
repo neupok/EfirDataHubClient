@@ -1,13 +1,7 @@
 package ru.binbank.efirdatahub.client;
 
 import ru.binbank.efirdatahub.entities.TableResponse;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.EmitentsRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.FintoolFieldsRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.InstrumentsRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.SecuritiesRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.EmissionDocsRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.FintoolReferenceDataRequest;
-import ru.binbank.efirdatahub.entities.infoservice.contracts.EnumsRequest;
+import ru.binbank.efirdatahub.entities.infoservice.contracts.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -40,5 +34,32 @@ public class InfoSecuritiesClient extends DataHubClient {
     }
     public TableResponse Enums(EnumsRequest enumsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Info/Enums", "GET", enumsRequest, TableResponse.class);
+    }
+    public TableResponse EnumValues(EnumValuesRequest enumValuesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/EnumValues", "GET", enumValuesRequest, TableResponse.class);
+    }
+    public TableResponse FintoolConvertation(FintoolConvertationRequest fintoolConvertationRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/FintoolConvertation", "GET", fintoolConvertationRequest, TableResponse.class);
+    }
+    public TableResponse MoneyFlow(MoneyFlowRequest moneyFlowRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/MoneyFlow", "GET", moneyFlowRequest, TableResponse.class);
+    }
+    public TableResponse Currencies(CurrenciesRequest currenciesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/Currencies", "GET", currenciesRequest, TableResponse.class);
+    }
+    public TableResponse IFXFintoolRefData(IFXFintoolRefDataRequest iFXFintoolRefDataRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/IFXFintoolRefData", "GET", iFXFintoolRefDataRequest, TableResponse.class);
+    }
+    public TableResponse ListOrgRoles(ListOrgRolesRequest listOrgRolesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/ListOrgRoles", "GET", listOrgRolesRequest, TableResponse.class);
+    }
+    public TableResponse Organizers(OrganizersRequest organizersRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/Organizers", "GET", organizersRequest, TableResponse.class);
+    }
+    public TableResponse ResidualFaceValue(ResidualFaceValueRequest residualFaceValueRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/ResidualFaceValue", "GET", residualFaceValueRequest, TableResponse.class);
+    }
+    public TableResponse ShareDividend(ShareDividendRequest shareDividendRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Info/ShareDividend", "GET", shareDividendRequest, TableResponse.class);
     }
 }
