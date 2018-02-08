@@ -24,7 +24,7 @@ public class EmissionDocsRequest implements IRequest {
     public String token() {
         return token;
     }
-    public void seToken(String token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

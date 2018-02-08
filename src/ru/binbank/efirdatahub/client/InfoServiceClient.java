@@ -9,8 +9,8 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
-public class InfoSecuritiesClient extends DataHubClient {
-    public InfoSecuritiesClient(ClientConnectionSettings connectionSettings) {
+public class InfoServiceClient extends DataHubClient {
+    public InfoServiceClient(ClientConnectionSettings connectionSettings) {
         super(connectionSettings);
     }
 
@@ -41,8 +41,8 @@ public class InfoSecuritiesClient extends DataHubClient {
     public TableResponse FintoolConvertation(FintoolConvertationRequest fintoolConvertationRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Info/FintoolConvertation", "GET", fintoolConvertationRequest, TableResponse.class);
     }
-    public TableResponse MoneyFlow(MoneyFlowRequest moneyFlowRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
-        return (TableResponse) runMethod("Info/MoneyFlow", "GET", moneyFlowRequest, TableResponse.class);
+    public MoneyFlowResponse MoneyFlow(MoneyFlowRequest moneyFlowRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (MoneyFlowResponse) runMethod("Info/MoneyFlow", "GET", moneyFlowRequest, MoneyFlowResponse.class);
     }
     public TableResponse Currencies(CurrenciesRequest currenciesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Info/Currencies", "GET", currenciesRequest, TableResponse.class);
@@ -56,8 +56,8 @@ public class InfoSecuritiesClient extends DataHubClient {
     public TableResponse Organizers(OrganizersRequest organizersRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Info/Organizers", "GET", organizersRequest, TableResponse.class);
     }
-    public TableResponse ResidualFaceValue(ResidualFaceValueRequest residualFaceValueRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
-        return (TableResponse) runMethod("Info/ResidualFaceValue", "GET", residualFaceValueRequest, TableResponse.class);
+    public ResidualFaceValueResponse ResidualFaceValue(ResidualFaceValueRequest residualFaceValueRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (ResidualFaceValueResponse) runMethod("Info/ResidualFaceValue", "GET", residualFaceValueRequest, ResidualFaceValueResponse.class);
     }
     public TableResponse ShareDividend(ShareDividendRequest shareDividendRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Info/ShareDividend", "GET", shareDividendRequest, TableResponse.class);
