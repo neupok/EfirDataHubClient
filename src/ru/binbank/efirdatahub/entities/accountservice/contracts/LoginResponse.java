@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 //import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "Token"
-})
+@JsonPropertyOrder({"Token"})
 public class LoginResponse {
 
     @JsonProperty("Token")

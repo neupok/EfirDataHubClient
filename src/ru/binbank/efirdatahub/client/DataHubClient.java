@@ -124,6 +124,7 @@ public abstract class DataHubClient {
 
         // Формирование URI
         URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
+
         // добавление токена
         uriBuilder.addParameter("token", token);
 

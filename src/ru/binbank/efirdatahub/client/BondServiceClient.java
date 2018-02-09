@@ -53,4 +53,31 @@ public class BondServiceClient extends DataHubClient {
     public TableResponse EmissionDocs(EmissionDocsRequest emissionDocsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (TableResponse) runMethod("Bond/EmissionDocs", "GET", emissionDocsRequest, TableResponse.class);
     }
+    public TableResponse ListBondTypes(ListBondTypesRequest listBondTypesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/ListBondTypes", "GET", listBondTypesRequest, TableResponse.class);
+    }
+    public TableResponse ListOrgRoles(ListOrgRolesRequest listOrgRolesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/ListBondTypes", "GET", listOrgRolesRequest, TableResponse.class);
+    }
+    public TableResponse ListTypeGroups(ListTypeGroupsRequest listTypeGroupsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/ListTypeGroups", "GET", listTypeGroupsRequest, TableResponse.class);
+    }
+    public TableResponse Offers(OffersRequest offersRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/Offers", "GET", offersRequest, TableResponse.class);
+    }
+    public TableResponse Organizers(OrganizersRequest organizersRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/Organizers", "GET", organizersRequest, TableResponse.class);
+    }
+    public TableResponse Programs(ProgramsRequest programsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/Programs", "GET", programsRequest, TableResponse.class);
+    }
+    public TableResponse RiskData(RiskDataRequest riskDataRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/RiskData", "GET", riskDataRequest, TableResponse.class);
+    }
+    public TableResponse TimeTableFields(TimeTableFieldsRequest timeTableFieldsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/TimeTableFields", "GET", timeTableFieldsRequest, TableResponse.class);
+    }
+    public TableResponse TimeTable(TimeTableRequest timeTableFieldsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (TableResponse) runMethod("Bond/TimeTable", "POST", timeTableFieldsRequest, TableResponse.class);
+    }
 }
