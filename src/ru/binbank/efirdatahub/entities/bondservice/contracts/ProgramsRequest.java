@@ -1,10 +1,10 @@
-package ru.binbank.efirdatahub.entities.BondService.contracts;
+package ru.binbank.efirdatahub.entities.bondservice.contracts;
 
 import ru.binbank.efirdatahub.entities.IRequest;
 
 import java.util.HashMap;
 
-public class ListOrgRolesRequest implements IRequest {
+public class ProgramsRequest implements IRequest {
     private String filter;
 
     public String getFilter() {
@@ -23,4 +23,3 @@ public class ListOrgRolesRequest implements IRequest {
         return result;
     }
 }
-

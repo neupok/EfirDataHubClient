@@ -1,4 +1,4 @@
-package ru.binbank.efirdatahub.entities.BondService.contracts;
+package ru.binbank.efirdatahub.entities.bondservice.contracts;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

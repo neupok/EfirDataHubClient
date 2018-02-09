@@ -1,6 +1,6 @@
 package ru.binbank.efirdatahub.client;
 
-import ru.binbank.efirdatahub.entities.BondService.contracts.*;
+import ru.binbank.efirdatahub.entities.bondservice.contracts.*;
 import ru.binbank.efirdatahub.entities.TableResponse;
 
 import java.io.IOException;

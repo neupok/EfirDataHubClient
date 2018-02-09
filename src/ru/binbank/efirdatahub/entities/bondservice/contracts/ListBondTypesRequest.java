@@ -1,10 +1,10 @@
-package ru.binbank.efirdatahub.entities.BondService.contracts;
+package ru.binbank.efirdatahub.entities.bondservice.contracts;
 
 import ru.binbank.efirdatahub.entities.IRequest;
 
 import java.util.HashMap;
 
-public class ListTypeGroupsRequest implements IRequest {
+public class ListBondTypesRequest implements IRequest{
     private String filter;
 
     public String getFilter() {
@@ -21,5 +21,6 @@ public class ListTypeGroupsRequest implements IRequest {
         if(filter!=null && !filter.isEmpty())
             result.put("filter", filter);
         return result;
+
     }
 }

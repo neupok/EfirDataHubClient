@@ -1,10 +1,10 @@
-package ru.binbank.efirdatahub.entities.BondService.contracts;
+package ru.binbank.efirdatahub.entities.bondservice.contracts;
 
 import ru.binbank.efirdatahub.entities.IRequest;
 
 import java.util.HashMap;
 
-public class TimeTableFieldsRequest implements IRequest {
+public class DefaultEventsRequest implements IRequest{
     private String filter;
 
     public String getFilter() {
@@ -16,7 +16,7 @@ public class TimeTableFieldsRequest implements IRequest {
 
     @Override
     public HashMap<String, String> getParams() {
-        HashMap<String,String> result = new HashMap<>();
+        HashMap<String, String> result = new HashMap<String, String>();
         if(filter!=null && !filter.isEmpty())
             result.put("filter", filter);
         return result;
