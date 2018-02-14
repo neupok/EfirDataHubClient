@@ -1,7 +1,11 @@
 package ru.binbank.efirdatahub.entities.riskservice.contracts;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"HasRisk","Error","HasRiskValue"})
 public class InstrumentHasRiskResponse {
     @JsonProperty("HasRisk")
     private String hasRisk;
