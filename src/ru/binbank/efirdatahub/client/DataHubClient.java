@@ -1,5 +1,6 @@
 package ru.binbank.efirdatahub.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
@@ -157,6 +158,7 @@ public abstract class DataHubClient {
     // kvd: neupok
     protected Object runMethod(String methodName, String methodType, Object request, Class responseClass) throws IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         String responseString = null;
         if (methodType.equals("GET")) {
