@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"IsinBase","CurrencyCode","LotSize","ExpirationDate","CurrencyRate","Price","Point","Nominal","MarketPrice","AccruedInterest","DeliveryAi","ConversionFactor","InstrumentType","IsinBaseRate","RatePeriod","QuotationPrice"})
+@JsonPropertyOrder({"IsinBase","CurrencyCode","LotSize","ExpirationDate","CurrencyRate","Price","Point","Error","Nominal","MarketPrice","AccruedInterest","DeliveryAi","ConversionFactor","InstrumentType","IsinBaseRate","RatePeriod","QuotationPrice"})
 public class PfiParamsResponse {
     @JsonProperty("AccruedInterest")
     private BigDecimal accruedInterest;
@@ -27,7 +27,7 @@ public class PfiParamsResponse {
     private int instrumentType;
     @JsonProperty("IsinBase")
     private String isinBase;
-    @JsonProperty("IsinBaseRate ")
+    @JsonProperty("IsinBaseRate")
     private BigDecimal isinBaseRate;
     @JsonProperty("LotSize")
     private int lotSize;
@@ -116,11 +116,11 @@ public class PfiParamsResponse {
     public void setIsinBase(String isinBase) {
         this.isinBase = isinBase;
     }
-    @JsonProperty("IsinBaseRate ")
+    @JsonProperty("IsinBaseRate")
     public BigDecimal getIsinBaseRate() {
         return isinBaseRate;
     }
-    @JsonProperty("IsinBaseRate ")
+    @JsonProperty("IsinBaseRate")
     public void setIsinBaseRate(BigDecimal isinBaseRate) {
         this.isinBaseRate = isinBaseRate;
     }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"Value","Error"})
-public class AmortizationsResponse {
+public class AmortisationsResponse {
     @JsonProperty("Dates")
     private String dates;
     @JsonProperty("Error")

@@ -11,7 +11,7 @@ public class Rule421Response {
     private String rule;
     @JsonProperty("Error")
     private String error;
-    @JsonProperty("DaysAfterBreakingRule ")
+    @JsonProperty("DaysAfterBreakingRule")
     private int daysAfterBreakingRule ;
 
     @JsonProperty("Error")
@@ -30,11 +30,11 @@ public class Rule421Response {
     public void setRule(String rule) {
         this.rule = rule;
     }
-    @JsonProperty("DaysAfterBreakingRule ")
+    @JsonProperty("DaysAfterBreakingRule")
     public int getDaysAfterBreakingRule() {
         return daysAfterBreakingRule;
     }
-    @JsonProperty("DaysAfterBreakingRule ")
+    @JsonProperty("DaysAfterBreakingRule")
     public void setDaysAfterBreakingRule(int daysAfterBreakingRule) {
         this.daysAfterBreakingRule = daysAfterBreakingRule;
     }

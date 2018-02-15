@@ -12,8 +12,8 @@ import java.security.NoSuchAlgorithmException;
 public class RiskServiceClient extends DataHubClient {
     public RiskServiceClient(ClientConnectionSettings connectionSettings) { super(connectionSettings); }
 
-    public TableResponse Amortizations(AmortizationsRequest amortizationsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
-        return (TableResponse) runMethod("Risk/Amortizations", "GET", amortizationsRequest, TableResponse.class);
+    public AmortisationsResponse Amortizations(AmortisationsRequest amortisationsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+        return (AmortisationsResponse) runMethod("Risk/Amortisations", "GET", amortisationsRequest, AmortisationsResponse.class);
     }
     public CouponYieldResponse CouponYield(CouponYieldRequest couponYieldRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
         return (CouponYieldResponse) runMethod("Risk/CouponYield", "GET", couponYieldRequest, CouponYieldResponse.class);

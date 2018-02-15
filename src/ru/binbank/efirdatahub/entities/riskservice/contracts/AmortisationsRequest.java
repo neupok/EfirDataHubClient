@@ -4,7 +4,7 @@ import ru.binbank.efirdatahub.entities.IRequest;
 
 import java.util.HashMap;
 
-public class AmortizationsRequest implements IRequest {
+public class AmortisationsRequest implements IRequest {
 
     private String isin;    //required
     private String currentOnly;

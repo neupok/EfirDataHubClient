@@ -6,68 +6,60 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"Date","Rule","HasAmortisations","TimingGroupId","TimingGroupName","RuleName","Error"})
+@JsonPropertyOrder({"Date","Rule","HasAmortisations","Error","TimingGroupId","TimingGroupName","RuleName"})
 public class RiskDateResponse {
     @JsonProperty("Date")
     private String date;
-    @JsonProperty("Error")
-    private String error;
-    @JsonProperty("HasAmortisations")
-    private String hasAmortisations;
     @JsonProperty("Rule")
     private String rule;
-    @JsonProperty("RuleName ")
-    private String ruleName ;
+    @JsonProperty("HasAmortisations")
+    private boolean hasAmortisations;
+    @JsonProperty("Error")
+    private String error;
     @JsonProperty("TimingGroupId")
     private int timingGroupId;
     @JsonProperty("TimingGroupName")
     private String timingGroupName;
+    @JsonProperty("RuleName")
+    private String ruleName ;
 
     @JsonProperty("Date")
     public String getDate() {
         return date;
     }
-    @JsonProperty("Date")
+
     public void setDate(String date) {
         this.date = date;
-    }
-    @JsonProperty("Error")
-    public String getError() {
-        return error;
-    }
-    @JsonProperty("Error")
-    public void setError(String error) {
-        this.error = error;
-    }
-    @JsonProperty("HasAmortisations")
-    public String getHasAmortisations() {
-        return hasAmortisations;
-    }
-    @JsonProperty("HasAmortisations")
-    public void setHasAmortisations(String hasAmortisations) {
-        this.hasAmortisations = hasAmortisations;
     }
     @JsonProperty("Rule")
     public String getRule() {
         return rule;
     }
-    @JsonProperty("Rule")
+
     public void setRule(String rule) {
         this.rule = rule;
     }
-    @JsonProperty("RuleName ")
-    public String getRuleName() {
-        return ruleName;
+    @JsonProperty("HasAmortisations")
+    public boolean isHasAmortisations() {
+        return hasAmortisations;
     }
-    @JsonProperty("RuleName ")
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
+
+    public void setHasAmortisations(boolean hasAmortisations) {
+        this.hasAmortisations = hasAmortisations;
+    }
+    @JsonProperty("Error")
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
     @JsonProperty("TimingGroupId")
     public int getTimingGroupId() {
         return timingGroupId;
     }
-    @JsonProperty("TimingGroupId")
+
     public void setTimingGroupId(int timingGroupId) {
         this.timingGroupId = timingGroupId;
     }
@@ -75,8 +67,16 @@ public class RiskDateResponse {
     public String getTimingGroupName() {
         return timingGroupName;
     }
-    @JsonProperty("TimingGroupName")
+
     public void setTimingGroupName(String timingGroupName) {
         this.timingGroupName = timingGroupName;
+    }
+    @JsonProperty("RuleName")
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }
