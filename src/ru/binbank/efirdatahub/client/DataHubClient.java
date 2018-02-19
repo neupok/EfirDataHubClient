@@ -1,4 +1,4 @@
-﻿package ru.binbank.efirdatahub.client;
+package ru.binbank.efirdatahub.client;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

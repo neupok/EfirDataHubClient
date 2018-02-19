@@ -1,5 +1,6 @@
 package ru.binbank.efirdatahub.client;
 
+import ru.binbank.efirdatahub.entities.ErrorResponseException;
 import ru.binbank.efirdatahub.entities.TableResponse;
 import ru.binbank.efirdatahub.entities.forecastservice.contracts.SecuritiesRequest;
 
@@ -14,7 +15,7 @@ public class ForecastServiceClient extends DataHubClient {
         super(connectionSettings);
     }
 
-    public TableResponse Securities(SecuritiesRequest securitiesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse Securities(SecuritiesRequest securitiesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         return (TableResponse) runMethod("Forecast/Securities", "GET", securitiesRequest, TableResponse.class);
     }
 

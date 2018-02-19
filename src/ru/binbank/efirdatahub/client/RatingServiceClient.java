@@ -1,4 +1,4 @@
-﻿package ru.binbank.efirdatahub.client;
+package ru.binbank.efirdatahub.client;
 
 import ru.binbank.efirdatahub.entities.ErrorResponseException;
 import ru.binbank.efirdatahub.entities.TableResponse;
@@ -34,7 +34,7 @@ public class RatingServiceClient extends DataHubClient {
     }
 
     // ListCompanies (не нужно)
-    public TableResponse ListCompanies(entities.ratingservice.contracts.ListCompaniesRequest listCompaniesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
+    public TableResponse ListCompanies(ListCompaniesRequest listCompaniesRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         TableResponse listCompaniesResponse = null;
 
         try {
@@ -61,17 +61,17 @@ public class RatingServiceClient extends DataHubClient {
     }
 
 
-    public TableResponse RatingsHistory(RatingsHistoryRequest ratingsHistoryRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse RatingsHistory(RatingsHistoryRequest ratingsHistoryRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         return (TableResponse) runMethod("Rating/RatingsHistory", "GET", ratingsHistoryRequest, TableResponse.class);
     }
 
-    public TableResponse SecurityRatings(SecurityRatingsRequest securityRatingsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse SecurityRatings(SecurityRatingsRequest securityRatingsRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         return (TableResponse) runMethod("Rating/SecurityRatings", "GET", securityRatingsRequest, TableResponse.class);
     }
-    public TableResponse SecurityRatingsHist(SecurityRatingsHistRequest securityRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse SecurityRatingsHist(SecurityRatingsHistRequest securityRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         return (TableResponse) runMethod("Rating/SecurityRatingsHist", "GET", securityRatingsHistRequest, TableResponse.class);
     }
-    public TableResponse CompanyRatingsHist(CompanyRatingsHistRequest companyRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
+    public TableResponse CompanyRatingsHist(CompanyRatingsHistRequest companyRatingsHistRequest) throws URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException, ErrorResponseException {
         return (TableResponse) runMethod("Rating/CompanyRatingsHist", "GET", companyRatingsHistRequest, TableResponse.class);
     }
 }
