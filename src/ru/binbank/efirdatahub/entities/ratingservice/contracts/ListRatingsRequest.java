@@ -1,9 +1,10 @@
 package ru.binbank.efirdatahub.entities.ratingservice.contracts;
 
 
+import ru.binbank.efirdatahub.entities.IRequest;
 import java.util.HashMap;
 
-public class ListRatingsRequest implements ru.binbank.efirdatahub.entities.IRequest {
+public class ListRatingsRequest implements IRequest {
     public String getFilter() {
         return filter;
     }

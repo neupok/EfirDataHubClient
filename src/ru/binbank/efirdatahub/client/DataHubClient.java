@@ -1,5 +1,6 @@
-package ru.binbank.efirdatahub.client;
+﻿package ru.binbank.efirdatahub.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
@@ -24,10 +25,12 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import ru.binbank.efirdatahub.entities.ErrorResponseException;
 import ru.binbank.efirdatahub.entities.ErrorTableResponse;
+import ru.binbank.efirdatahub.entities.IRequest;
+
+import java.net.URI;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -44,41 +47,6 @@ public abstract class DataHubClient {
         this.connectionSettings = connectionSettings;
     }
 
-    // kvd ---> begin
-/*
-    public class ResponseErrorException extends Exception { //UnrecognizedPropertyException {
-        ResponseErrorException(ErrorTableResponse errorTableResponse) {
-            this.errorResponse = errorTableResponse;
-        }
-
-        private ErrorTableResponse errorResponse;
-
-        public void setErrorResponse(String errResponseString, Class errResponseClass) {
-            ObjectMapper errorObjectMapper = new ObjectMapper();
-            errorResponse = new Object();
-            try {
-                errorResponse = errorObjectMapper.readValue(errResponseString, errResponseClass);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        public Object getErrorResponse() {
-            return errorResponse;
-        }
-
-        //Object GetErrorResponse (String errResponseString, Class errResponseClass) {
-        //    ObjectMapper errorObjectMapper = new ObjectMapper();
-        //    Object errorResponse = new Object();
-        //
-        //    errorResponse = errorObjectMapper.readValue(errResponseString, errResponseClass);
-        //    return errorResponse;
-        //}
-
-    }
-*/
-    // kvd <--- end
 
     protected CloseableHttpClient createHttpClient()
     {
@@ -130,16 +98,21 @@ public abstract class DataHubClient {
         return RequestConfig.custom().setProxy(connectionSettings.proxy).setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM)).build();
     }
 
+    protected String postSync(String specificUri, Map<String, String> params,String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+        //
+        //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
 
-    protected String postSync(String specificUri, String query) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
         // Формирование URI
-        URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
-
+        URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
+        // добавление токена
+        if(token != null) {
+            uriBuilder.addParameter("token", token);
+        }
         // Формирование тела сообщения
         HttpEntity entity = new StringEntity(query, ContentType.APPLICATION_JSON);
 
         // Сформировать запрос
-        HttpPost request = new HttpPost(u);
+        HttpPost request = new HttpPost(uriBuilder.build());
         request.setEntity(entity);
         request.setConfig(createRequestConfig());
         request.addHeader("Accept", "application/json" );
@@ -149,15 +122,9 @@ public abstract class DataHubClient {
         // Вызов метода
         CloseableHttpResponse response = httpClient.execute(request, createClientContext());
 
-        try {
-            System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
-            System.out.println();
-            return EntityUtils.toString(response.getEntity());
-        } finally {
-            response.close();
-        }
+        return EntityUtils.toString(response.getEntity());
     }
+
 
     protected String getSync(String specificUri, Map<String, String> params) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException, ErrorResponseException {
         //
@@ -165,6 +132,7 @@ public abstract class DataHubClient {
 
         // Формирование URI
         URIBuilder uriBuilder = new URIBuilder(connectionSettings.baseURI + (connectionSettings.baseURI.endsWith("/") ? "" : "/") + specificUri);
+
         // добавление токена
         uriBuilder.addParameter("token", token);
 
@@ -196,38 +164,13 @@ public abstract class DataHubClient {
             ObjectMapper objectMapper = new ObjectMapper();
             errorTableResponse = objectMapper.readValue(responseString, errorTableResponse.getClass());
 
-            //errorTableResponse.setError("Error 1");
-            //errorTableResponse.setStatuscode(400);
-            //errorTableResponse.setSubstatuscode(0);
-
             // Создаём объект для exception:
             ErrorResponseException errorResponseException = new ErrorResponseException();
 
             // Инициализируем exception объектом ошибки:
             errorResponseException.ErrorResponseException(errorTableResponse);
 
-
-
-            // Инициализируем атрибуты объекта ошибки:
-            //errorTableResponse.setError("Error 1");
-            //errorTableResponse.setStatuscode(400);
-            //errorTableResponse.setSubstatuscode(0);
-
-            // Инициализируем exception объектом ошибки:
-            //ResponseErrorException responseErrorException = new ResponseErrorException(errorTableResponse);
-
             // Выбрасываем exception ошибки:
-            //ErrorResponseException errorResponseException = new ErrorResponseException();
-            //String stGetReasonPhrase = response.getStatusLine().getReasonPhrase(); // kvd
-            //String stGetHeaders = response.getHeade
-            // rs().toString();
-            //String stGetEntity = EntityUtils.toString(response.getEntity()); // kvd
-
-            //Header[] headers = response.getAllHeaders();
-            //for(Header header: headers) {
-            //    System.out.println("Key [ " + header.getName() + "], Value[ " + header.getValue() + " ]");
-            //}
-
             throw errorResponseException;
         }
 
@@ -245,68 +188,26 @@ public abstract class DataHubClient {
     // kvd: neupok
     protected Object runMethod(String methodName, String methodType, Object request, Class responseClass) throws IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, ErrorResponseException {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         Object response = new Object();
 
         String responseString = null;
         if (methodType.equals("GET")) {
             try {
-                responseString = getSync(methodName, ((ru.binbank.efirdatahub.entities.IRequest) request).getParams());
-                //TableResponse
+                responseString = getSync(methodName, ((IRequest)request).getParams());
             }
             catch (ErrorResponseException e) {
-                // Создаём объект для ошибки:
-                //ErrorTableResponse errorTableResponse = new ErrorTableResponse();
-
-                // Инициализируем атрибуты объекта ошибки:
-                //errorTableResponse.setError("Error 1");
-                //errorTableResponse.setStatuscode(400);
-                //errorTableResponse.setSubstatuscode(0);
-
-                // Инициализируем exception объектом ошибки:
-                //e.ErrorResponseException(errorTableResponse);
-                //ErrorResponseException responseErrorException = new ErrorResponseException(errorTableResponse);
-
-                //ErrorTableResponse errorTableResponse;
-                //deserialize
-                //        ResponseErrorException responseErrorException = new ResponseErrorException();
-                //        responseErrorException.setErrorResponse(errorTableResponse);
-
-                // Выбрасываем исключение дальше наверх:
+                 // Выбрасываем исключение дальше наверх:
                 throw e;
             }
         } else if (methodType.equals("POST")) {
             String requestString = objectMapper.writeValueAsString(request);
-            responseString = postSync(methodName, requestString);
+            responseString = postSync(methodName, ((IRequest)request).getParams(), requestString);
         }
 
-        //try {
-            response = objectMapper.readValue(responseString, responseClass);
-            return response;
-//        } catch (UnrecognizedPropertyException e) {
-//            ResponseErrorException responseErrorException = new ResponseErrorException();
 
-//            responseErrorException.setErrorResponse(responseString,  ErrorTableResponse.class);
-
-//            System.out.println("Exc 1");
-//            return response;
-
-
-//            throw responseErrorException;
-//        } catch (IOException e) {
-//            System.out.println("Exc 1");
-//            return response;
-//        } catch (URISyntaxException e) {
-//            System.out.println("Exc 2");
-//            return response;
-//        } catch (KeyManagementException e) {
-//            System.out.println("Exc 3");
-//            return response;
-//        } catch (NoSuchAlgorithmException e) {
-//            System.out.println("Exc 4");
-//            return response;
-//        } catch (KeyStoreException e) {
-//            System.out.println("Exc 5");
-//            return response;
-//        }
+        response = objectMapper.readValue(responseString, responseClass);
+        return response;
     }
 }

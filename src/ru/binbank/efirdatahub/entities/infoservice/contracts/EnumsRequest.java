@@ -1,24 +1,23 @@
-package ru.binbank.efirdatahub.entities.ratingservice.contracts;
+package ru.binbank.efirdatahub.entities.infoservice.contracts;
+
+import ru.binbank.efirdatahub.entities.IRequest;
 
 import java.util.HashMap;
 
-public class ListCompaniesRequest implements ru.binbank.efirdatahub.entities.IRequest {
+public class EnumsRequest implements IRequest {
+    private String filter;
     public String getFilter() {
         return filter;
     }
-
     public void setFilter(String filter) {
         this.filter = filter;
     }
 
-    private String filter;
-
     @Override
     public HashMap<String, String> getParams() {
         HashMap<String, String> result = new HashMap<String, String>();
-        if (filter != null)
-            if (!filter.isEmpty())
-                result.put("filter", filter);
+        if(filter!=null && !filter.isEmpty())
+            result.put("filter", filter);
         return result;
     }
 }

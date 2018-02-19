@@ -1,6 +1,7 @@
 package ru.binbank.efirdatahub.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.binbank.efirdatahub.entities.IRequest;
 import ru.binbank.efirdatahub.entities.accountservice.contracts.LoginRequest;
 import ru.binbank.efirdatahub.entities.accountservice.contracts.LoginResponse;
 import ru.binbank.efirdatahub.entities.accountservice.contracts.LogoffRequest;
@@ -22,7 +23,7 @@ public class AccountServiceClient extends DataHubClient {
         LoginResponse loginResponse = null;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            String retString = postSync("/Account/Login", objectMapper.writeValueAsString(loginRequest));
+            String retString = postSync("Account/Login",((IRequest)loginRequest).getParams(), objectMapper.writeValueAsString(loginRequest));
             loginResponse = objectMapper.readValue(retString, LoginResponse.class);
         } catch (KeyStoreException e) {
             e.printStackTrace();
@@ -46,7 +47,7 @@ public class AccountServiceClient extends DataHubClient {
             // В результате вернётся строка, в которой будет:
             // - если успех: пустой token;
             // - если ошибка: Error, StatusCode, SubStatusCode;
-            String retString = postSync("/Account/Logoff", objectMapper.writeValueAsString(logoffRequest));
+            String retString = postSync("Account/Logoff", ((IRequest)logoffRequest).getParams(),objectMapper.writeValueAsString(logoffRequest));
             logoffResponse = objectMapper.readValue(retString, LogoffResponse.class);
         } catch (KeyStoreException e) {
             e.printStackTrace();

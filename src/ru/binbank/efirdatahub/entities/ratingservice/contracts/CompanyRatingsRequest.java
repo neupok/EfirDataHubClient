@@ -5,9 +5,9 @@ import ru.binbank.efirdatahub.entities.IRequest;
 import java.util.HashMap;
 
 public class CompanyRatingsRequest implements IRequest{
-    private String id;
+    private String id;      //required
     private String idType;
-    private String Date;
+    private String Date;    //required
     private String filter;
 
     public String getId() {
