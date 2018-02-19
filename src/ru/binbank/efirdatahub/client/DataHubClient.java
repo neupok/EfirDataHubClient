@@ -22,6 +22,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
+import ru.binbank.efirdatahub.entities.ErrorResponseException;
+import ru.binbank.efirdatahub.entities.ErrorTableResponse;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
@@ -41,6 +43,42 @@ public abstract class DataHubClient {
     DataHubClient(ClientConnectionSettings connectionSettings) {
         this.connectionSettings = connectionSettings;
     }
+
+    // kvd ---> begin
+/*
+    public class ResponseErrorException extends Exception { //UnrecognizedPropertyException {
+        ResponseErrorException(ErrorTableResponse errorTableResponse) {
+            this.errorResponse = errorTableResponse;
+        }
+
+        private ErrorTableResponse errorResponse;
+
+        public void setErrorResponse(String errResponseString, Class errResponseClass) {
+            ObjectMapper errorObjectMapper = new ObjectMapper();
+            errorResponse = new Object();
+            try {
+                errorResponse = errorObjectMapper.readValue(errResponseString, errResponseClass);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        public Object getErrorResponse() {
+            return errorResponse;
+        }
+
+        //Object GetErrorResponse (String errResponseString, Class errResponseClass) {
+        //    ObjectMapper errorObjectMapper = new ObjectMapper();
+        //    Object errorResponse = new Object();
+        //
+        //    errorResponse = errorObjectMapper.readValue(errResponseString, errResponseClass);
+        //    return errorResponse;
+        //}
+
+    }
+*/
+    // kvd <--- end
 
     protected CloseableHttpClient createHttpClient()
     {
@@ -121,7 +159,7 @@ public abstract class DataHubClient {
         }
     }
 
-    protected String getSync(String specificUri, Map<String, String> params) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException {
+    protected String getSync(String specificUri, Map<String, String> params) throws KeyStoreException, IOException, KeyManagementException, URISyntaxException, NoSuchAlgorithmException, ErrorResponseException {
         //
         //URI u = new URI(new StringBuilder().append(connectionSettings.baseURI).append(specificUri).toString());
 
@@ -145,6 +183,54 @@ public abstract class DataHubClient {
         // Вызов метода
         CloseableHttpResponse response = httpClient.execute(request, createClientContext());
 
+        // Анализ статуса
+        if (response.getStatusLine().getStatusCode() != 200) {
+
+            // Создаём объект для ошибки:
+            ErrorTableResponse errorTableResponse = new ErrorTableResponse();
+
+            // Получаем атрибуты ошибки (Error, StatusCode, SubStatusCode) из Entity ответа:
+            String responseString = EntityUtils.toString(response.getEntity());
+
+            // Десериализуем строку с атрибутами ошибки в объект для ошибки:
+            ObjectMapper objectMapper = new ObjectMapper();
+            errorTableResponse = objectMapper.readValue(responseString, errorTableResponse.getClass());
+
+            //errorTableResponse.setError("Error 1");
+            //errorTableResponse.setStatuscode(400);
+            //errorTableResponse.setSubstatuscode(0);
+
+            // Создаём объект для exception:
+            ErrorResponseException errorResponseException = new ErrorResponseException();
+
+            // Инициализируем exception объектом ошибки:
+            errorResponseException.ErrorResponseException(errorTableResponse);
+
+
+
+            // Инициализируем атрибуты объекта ошибки:
+            //errorTableResponse.setError("Error 1");
+            //errorTableResponse.setStatuscode(400);
+            //errorTableResponse.setSubstatuscode(0);
+
+            // Инициализируем exception объектом ошибки:
+            //ResponseErrorException responseErrorException = new ResponseErrorException(errorTableResponse);
+
+            // Выбрасываем exception ошибки:
+            //ErrorResponseException errorResponseException = new ErrorResponseException();
+            //String stGetReasonPhrase = response.getStatusLine().getReasonPhrase(); // kvd
+            //String stGetHeaders = response.getHeade
+            // rs().toString();
+            //String stGetEntity = EntityUtils.toString(response.getEntity()); // kvd
+
+            //Header[] headers = response.getAllHeaders();
+            //for(Header header: headers) {
+            //    System.out.println("Key [ " + header.getName() + "], Value[ " + header.getValue() + " ]");
+            //}
+
+            throw errorResponseException;
+        }
+
         return EntityUtils.toString(response.getEntity());
     }
 
@@ -157,21 +243,70 @@ public abstract class DataHubClient {
     }
 
     // kvd: neupok
-    protected Object runMethod(String methodName, String methodType, Object request, Class responseClass) throws IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+    protected Object runMethod(String methodName, String methodType, Object request, Class responseClass) throws IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, KeyStoreException, ErrorResponseException {
         ObjectMapper objectMapper = new ObjectMapper();
+        Object response = new Object();
 
         String responseString = null;
         if (methodType.equals("GET")) {
-            responseString = getSync(methodName, ((ru.binbank.efirdatahub.entities.IRequest)request).getParams());
-        }
-        else if (methodType.equals("POST")) {
+            try {
+                responseString = getSync(methodName, ((ru.binbank.efirdatahub.entities.IRequest) request).getParams());
+                //TableResponse
+            }
+            catch (ErrorResponseException e) {
+                // Создаём объект для ошибки:
+                //ErrorTableResponse errorTableResponse = new ErrorTableResponse();
+
+                // Инициализируем атрибуты объекта ошибки:
+                //errorTableResponse.setError("Error 1");
+                //errorTableResponse.setStatuscode(400);
+                //errorTableResponse.setSubstatuscode(0);
+
+                // Инициализируем exception объектом ошибки:
+                //e.ErrorResponseException(errorTableResponse);
+                //ErrorResponseException responseErrorException = new ErrorResponseException(errorTableResponse);
+
+                //ErrorTableResponse errorTableResponse;
+                //deserialize
+                //        ResponseErrorException responseErrorException = new ResponseErrorException();
+                //        responseErrorException.setErrorResponse(errorTableResponse);
+
+                // Выбрасываем исключение дальше наверх:
+                throw e;
+            }
+        } else if (methodType.equals("POST")) {
             String requestString = objectMapper.writeValueAsString(request);
             responseString = postSync(methodName, requestString);
         }
 
-        Object response = objectMapper.readValue(responseString, responseClass);
+        //try {
+            response = objectMapper.readValue(responseString, responseClass);
+            return response;
+//        } catch (UnrecognizedPropertyException e) {
+//            ResponseErrorException responseErrorException = new ResponseErrorException();
 
-        return response;
+//            responseErrorException.setErrorResponse(responseString,  ErrorTableResponse.class);
+
+//            System.out.println("Exc 1");
+//            return response;
+
+
+//            throw responseErrorException;
+//        } catch (IOException e) {
+//            System.out.println("Exc 1");
+//            return response;
+//        } catch (URISyntaxException e) {
+//            System.out.println("Exc 2");
+//            return response;
+//        } catch (KeyManagementException e) {
+//            System.out.println("Exc 3");
+//            return response;
+//        } catch (NoSuchAlgorithmException e) {
+//            System.out.println("Exc 4");
+//            return response;
+//        } catch (KeyStoreException e) {
+//            System.out.println("Exc 5");
+//            return response;
+//        }
     }
-
 }
